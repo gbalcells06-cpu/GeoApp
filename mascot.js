@@ -2,7 +2,9 @@
 // API expuesta en window.mascot: setExpression(kind, holdMs), say(text), hide(),
 // enable(), disable(), isEnabled()
 (function () {
-  const SIZE = 96;
+  // En pantallas estrechas (móvil) la mascota se hace más pequeña: con el
+  // tamaño de escritorio tapaba botones enteros del menú al pasearse por encima.
+  const SIZE = window.innerWidth < 480 ? 68 : 96;
   const MARGIN = 16;
   const MAX_SPEED = 16; // px/frame — evita que un lanzamiento brusco lo haga "teleportarse"
 
@@ -718,6 +720,66 @@
       if (history.length > 6) history.shift();
     }
   });
+
+  // ---- Arrastrar / tocar / doble toque con el dedo (móvil) ----
+  // Sin esto la mascota era inerte al tacto: no había ningún listener de touch,
+  // solo de ratón. El doble toque no usa "dblclick" porque el preventDefault()
+  // de touchstart bloquea los clics sintéticos que el navegador generaría.
+  let lastTapTime = 0;
+
+  function touchPoint(e) {
+    const t = e.touches[0] || e.changedTouches[0];
+    return { clientX: t.clientX, clientY: t.clientY };
+  }
+
+  svg.addEventListener(
+    "touchstart",
+    (e) => {
+      const p = touchPoint(e);
+      mouseX = p.clientX;
+      mouseY = p.clientY;
+      startDrag({ preventDefault: () => e.preventDefault(), clientX: p.clientX, clientY: p.clientY });
+    },
+    { passive: false }
+  );
+
+  svg.addEventListener(
+    "touchmove",
+    (e) => {
+      if (!dragging) return;
+      e.preventDefault();
+      const p = touchPoint(e);
+      mouseX = p.clientX;
+      mouseY = p.clientY;
+      dragDistance = Math.max(dragDistance, Math.hypot(p.clientX - downX, p.clientY - downY));
+      x = p.clientX - dragOffsetX;
+      y = p.clientY - dragOffsetY;
+      history.push({ x: p.clientX, y: p.clientY, t: performance.now() });
+      if (history.length > 6) history.shift();
+    },
+    { passive: false }
+  );
+
+  function handleTouchEnd(e) {
+    if (!dragging) return;
+    const wasQuickTap = dragDistance < 8 && Date.now() - downTime < 280;
+    const now = Date.now();
+    if (wasQuickTap && now - lastTapTime < 400) {
+      // segundo toque rápido seguido del primero: dato curioso, en vez de un boop
+      lastTapTime = 0;
+      dragging = false;
+      svg.style.cursor = "grab";
+      exprLock = null;
+      document.dispatchEvent(new CustomEvent("mascot-rightclick"));
+      e.preventDefault();
+      return;
+    }
+    if (wasQuickTap) lastTapTime = now;
+    releaseDrag();
+  }
+
+  svg.addEventListener("touchend", handleTouchEnd, { passive: false });
+  svg.addEventListener("touchcancel", handleTouchEnd, { passive: false });
 
   // ---- Reacción al acercar el cursor (sin hacer clic) ----
   let wasNear = false;

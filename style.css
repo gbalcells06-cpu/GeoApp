@@ -7,6 +7,12 @@
    relación con la mascota), verde de sus "continentes" (--accent-teal) y
    rosa de sus mejillas (--accent-pink) para algún detalle puntual. */
 :root {
+  /* Le decimos al navegador que esta app ya está pensada para tema oscuro,
+     para que Android/Chrome no le aplique su "oscurecido forzado" automático
+     (esa función reinterpreta colores elemento por elemento y deja la app
+     con un aspecto inconsistente: unos tonos más oscuros, otros más claros
+     de lo que deberían). */
+  color-scheme: dark;
   --accent-blue: #3b97e8;
   --accent-deep: #1f6fc4;
   --accent-teal: #5ed179;
@@ -399,6 +405,11 @@ h1 {
   transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 .segmented-btn:hover { color: #eef1f5; transform: none; box-shadow: none; }
+@media (max-width: 600px), (pointer: coarse) {
+  /* En móvil los botones del selector de modo eran demasiado pequeños para
+     tocarlos con precisión (27px de alto); el mínimo recomendado son 44px. */
+  .segmented-btn { padding: 11px 16px; font-size: 0.95rem; min-height: 44px; }
+}
 .segmented-btn.active {
   background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
   color: #fff;
