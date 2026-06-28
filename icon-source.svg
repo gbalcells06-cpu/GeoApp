@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6ec3f4"></stop>
+      <stop offset="55%" stop-color="#3b97e8"></stop>
+      <stop offset="100%" stop-color="#1f6fc4"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" fill="#14283d"></rect>
+  <circle cx="50" cy="50" r="46" fill="url(#g)" stroke="#15324f" stroke-width="2"></circle>
+  <path d="M22,22 C34,14 48,18 48,30 C48,40 38,46 28,44 C18,42 14,30 22,22 Z" fill="#67d17e"></path>
+  <path d="M58,48 C70,42 84,48 82,62 C80,76 66,86 56,80 C50,76 51,63 54,55 C55,51 56,49 58,48 Z" fill="#67d17e"></path>
+  <path d="M68,20 C76,16 86,20 84,28 C82,34 72,35 68,29 C65,25 66,22 68,20 Z" fill="#67d17e"></path>
+  <path d="M50,5 C64,5 76,13 76,22 C76,28 66,30 58,26 C54,24 50,25 46,26 C38,30 24,28 24,22 C24,13 36,5 50,5 Z" fill="#eef6fb" opacity="0.92"></path>
+  <circle cx="50" cy="50" r="46" fill="none" stroke="#15324f" stroke-width="2"></circle>
+  <g id="eye-left">
+    <circle cx="35" cy="47" r="13.5" fill="#ffffff"></circle>
+    <circle cx="35" cy="47" r="7.4" fill="#16213a"></circle>
+    <circle cx="37.8" cy="44" r="2.5" fill="#ffffff"></circle>
+  </g>
+  <g id="eye-right">
+    <circle cx="65" cy="47" r="13.5" fill="#ffffff"></circle>
+    <circle cx="65" cy="47" r="7.4" fill="#16213a"></circle>
+    <circle cx="67.8" cy="44" r="2.5" fill="#ffffff"></circle>
+  </g>
+  <path d="M33,61 Q50,79 67,61 Z" fill="#15324f"></path>
+  <path d="M38,63 Q50,75 62,63 Z" fill="#9b3b46"></path>
+</svg>

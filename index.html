@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Capitales del Mundo</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#14283d">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Capitales">
+<meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+
+<!-- PANTALLA: INICIO -->
+<section id="screen-home" class="screen active">
+  <h1 data-i18n="app.title">Capitales del Mundo</h1>
+  <p class="subtitle" data-i18n="home.subtitle">¿Qué quieres hacer?</p>
+  <div class="continent-list">
+    <button id="btn-go-practice" class="continent-btn" data-i18n="home.practice">Practicar</button>
+    <button id="btn-go-study" class="continent-btn" data-i18n="home.study">Ver mundo</button>
+  </div>
+  <button id="btn-go-options" class="btn-link home-options-link">&#9881; <span data-i18n="home.options">Opciones</span></button>
+</section>
+
+<!-- PANTALLA: OPCIONES -->
+<section id="screen-options" class="screen">
+  <button id="btn-options-back-home" class="btn-link self-start">&larr; <span data-i18n="nav.backHome">Inicio</span></button>
+  <h1 data-i18n="options.title">Opciones</h1>
+  <p class="subtitle" data-i18n="options.subtitle">Idioma, sonido y música de fondo</p>
+  <div class="options-panel">
+    <label class="options-volume-row">
+      Idioma / Language
+      <select id="language-select">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="pt">Português</option>
+        <option value="de">Deutsch</option>
+      </select>
+    </label>
+    <label class="switch-label">
+      <input type="checkbox" id="toggle-mascot" checked>
+      <span data-i18n="options.showMascot">Mostrar mascota</span>
+    </label>
+    <label class="switch-label">
+      <input type="checkbox" id="toggle-music" checked>
+      <span data-i18n="options.music">Música de fondo</span>
+    </label>
+    <label class="options-volume-row">
+      <span data-i18n="options.musicVolume">Volumen de la música</span>
+      <input type="range" id="music-volume" min="0" max="1" step="0.05" value="0.5">
+    </label>
+    <label class="switch-label">
+      <input type="checkbox" id="toggle-sfx" checked>
+      <span data-i18n="options.sfx">Efectos de sonido</span>
+    </label>
+  </div>
+</section>
+
+<!-- PANTALLA: MENÚ DE PRÁCTICA -->
+<section id="screen-menu" class="screen">
+  <button id="btn-menu-back-home" class="btn-link self-start">&larr; <span data-i18n="nav.backHome">Inicio</span></button>
+  <h1 data-i18n="menu.title">Practicar</h1>
+  <p class="subtitle" data-i18n="menu.subtitle">Elige un continente para empezar a practicar</p>
+  <label class="switch-label">
+    <input type="checkbox" id="toggle-menu-territories">
+    <span data-i18n="menu.territories">Incluir territorios autónomos (Gibraltar, Hong Kong, Santa Elena...)</span>
+  </label>
+  <div class="segmented game-mode-select" id="game-mode-select" role="group" aria-label="Modo de juego">
+    <button type="button" class="segmented-btn active" data-mode="completo" data-i18n="mode.completo">País + capital</button>
+    <button type="button" class="segmented-btn" data-mode="mapa" data-i18n="mode.mapa">Solo localizar país</button>
+    <button type="button" class="segmented-btn" data-mode="capital" data-i18n="mode.capital">Solo capital</button>
+    <button type="button" class="segmented-btn" data-mode="reverso" data-i18n="mode.reverso">Capital &rarr; país</button>
+    <button type="button" class="segmented-btn" data-mode="test" data-i18n="mode.test">Test (opción múltiple)</button>
+    <button type="button" class="segmented-btn" data-mode="bandera" data-i18n="mode.bandera">Bandera → país</button>
+  </div>
+  <div class="continent-list" id="continent-list"></div>
+</section>
+
+<!-- (El botón de "Practicar por zonas" se inserta dinámicamente en #continent-list, junto a los de cada continente) -->
+
+<!-- PANTALLA: SELECCIÓN DE CONTINENTE PARA ESTUDIAR -->
+<section id="screen-study-select" class="screen">
+  <button id="btn-study-back-home" class="btn-link self-start">&larr; <span data-i18n="nav.backHome">Inicio</span></button>
+  <h1 data-i18n="study.title">Ver mundo</h1>
+  <p class="subtitle" data-i18n="study.subtitle">Elige un continente para repasar sus países y capitales</p>
+  <div class="continent-list" id="study-continent-list"></div>
+</section>
+
+<!-- PANTALLA: ESTUDIO (mapa + lista de países y capitales, con progreso opcional) -->
+<section id="screen-study" class="screen">
+  <header class="game-header">
+    <button id="btn-study-back" class="btn-link">&larr; <span data-i18n="nav.back">Volver</span></button>
+    <h1 id="study-title" class="study-title">África</h1>
+    <label class="switch-label">
+      <input type="checkbox" id="toggle-study-progress">
+      <span data-i18n="study.showProgress">Ver mi progreso (colores)</span>
+    </label>
+  </header>
+  <div class="segmented" id="study-territory-mode" role="group" aria-label="Mostrar territorios">
+    <button type="button" class="segmented-btn active" data-mode="sovereign" data-i18n="territory.sovereign">Solo países</button>
+    <button type="button" class="segmented-btn" data-mode="both" data-i18n="territory.both">+ Territorios</button>
+    <button type="button" class="segmented-btn" data-mode="territoriesOnly" data-i18n="territory.territoriesOnly">Solo territorios</button>
+  </div>
+  <p id="study-progress-legend" class="subtitle hidden" data-i18n="study.legend">Verde = se te da bien · Amarillo = a medias · Rojo = se te da mal · Gris = sin datos todavía</p>
+  <div class="study-layout">
+    <div class="map-wrapper study-map-wrapper">
+      <svg id="study-map" viewBox="0 0 960 960" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <div class="study-list-wrapper">
+      <ul id="study-list" class="study-list"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- PANTALLA: PRACTICAR POR ZONAS — elegir zona predefinida o selección guardada/personalizada -->
+<section id="screen-zone-select" class="screen">
+  <button id="btn-zone-back-menu" class="btn-link self-start">&larr; <span data-i18n="nav.backPractice">Practicar</span></button>
+  <h1 id="zone-title" data-i18n="zone.title">Practicar por zonas</h1>
+  <p class="subtitle" data-i18n="zone.subtitle">Elige una zona predefinida o crea tu propia selección de países</p>
+  <div class="continent-list" id="zone-region-list"></div>
+
+  <h2 class="zone-subheading" data-i18n="zone.customHeading">Selecciones personalizadas</h2>
+  <div class="continent-list" id="zone-saved-list"></div>
+  <button id="btn-zone-new-custom" class="continent-btn reinforce" data-i18n="zone.newCustom">+ Crear selección personalizada</button>
+</section>
+
+<!-- PANTALLA: SELECCIÓN PERSONALIZADA EN EL MAPA -->
+<section id="screen-custom-select" class="screen">
+  <header class="game-header">
+    <button id="btn-custom-back" class="btn-link">&larr; <span data-i18n="nav.back">Volver</span></button>
+    <h1 data-i18n="custom.title">Elige los países a practicar</h1>
+    <span class="counter remaining"><span data-i18n="custom.selected">Seleccionados</span>: <strong id="custom-selected-count">0</strong></span>
+  </header>
+  <label class="switch-label">
+    <input type="checkbox" id="toggle-custom-territories">
+    <span data-i18n="custom.territories">Incluir territorios autónomos</span>
+  </label>
+  <p class="subtitle" data-i18n="custom.subtitle">Haz clic en los países que quieras incluir (puedes deseleccionarlos volviendo a hacer clic)</p>
+  <div class="map-wrapper study-map-wrapper">
+    <svg id="custom-map" viewBox="0 0 960 960" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="custom-actions">
+    <button id="btn-custom-practice" data-i18n="custom.practiceSelection">Practicar selección</button>
+    <button id="btn-custom-save" data-i18n="custom.saveSelection">Guardar selección</button>
+  </div>
+</section>
+
+<!-- PANTALLA: JUEGO -->
+<section id="screen-game" class="screen">
+  <header class="game-header">
+    <button id="btn-back-menu" class="btn-link">&larr; <span data-i18n="nav.backMenu">Menú</span></button>
+    <div class="target-country">
+      <span class="label" id="target-label" data-i18n="game.findOnMap">Encuentra en el mapa:</span>
+      <img id="target-flag" class="target-flag" alt="" hidden>
+      <span id="target-country-name" class="country-name">—</span>
+    </div>
+    <div class="counters">
+      <span class="counter remaining"><span data-i18n="game.remaining">Quedan</span>: <strong id="counter-remaining">0</strong></span>
+      <span class="counter correct">✓ <strong id="counter-correct">0</strong></span>
+      <span class="counter assisted">🛟 <strong id="counter-assisted">0</strong></span>
+      <span class="counter wrong">✗ <strong id="counter-wrong">0</strong></span>
+    </div>
+    <label class="switch-label">
+      <input type="checkbox" id="toggle-progress" checked>
+      <span data-i18n="game.showCompleted">Ver países completados</span>
+    </label>
+  </header>
+
+  <div class="map-wrapper">
+    <svg id="map" viewBox="0 0 960 960" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="map-feedback" class="map-feedback"></div>
+  </div>
+
+  <div id="dont-know-wrap" class="dont-know-wrap hidden">
+    <button type="button" id="btn-dont-know" data-i18n="action.dontKnow">No lo sé, siguiente &rarr;</button>
+  </div>
+
+  <div id="capital-panel" class="capital-panel hidden">
+    <p><span data-i18n="game.capitalOf">Capital de</span> <strong id="capital-country-label"></strong>:</p>
+    <form id="capital-form" autocomplete="off">
+      <input type="text" id="capital-input" placeholder="Escribe la capital..." data-i18n-placeholder="game.capitalPlaceholder" autocomplete="off">
+      <button type="submit" id="btn-submit-capital" data-i18n="action.submit">Enviar</button>
+      <button type="button" id="btn-hint" data-i18n="action.hint">Pista</button>
+    </form>
+    <div id="capital-choices" class="capital-choices hidden"></div>
+    <p id="hint-text" class="hint-text"></p>
+    <p id="capital-feedback" class="capital-feedback"></p>
+    <div id="retry-buttons" class="retry-buttons hidden">
+      <button id="btn-retry" data-i18n="action.retry">Reintentar</button>
+      <button id="btn-reveal" data-i18n="action.reveal">Mostrar respuesta</button>
+    </div>
+    <div id="next-button-wrap" class="next-button-wrap hidden">
+      <button id="btn-next-country" data-i18n="action.nextCountry">Siguiente país &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- PANTALLA: RESUMEN FINAL -->
+<section id="screen-summary" class="screen">
+  <h1 data-i18n="summary.title">¡Completado!</h1>
+  <p class="summary-text" data-i18n="summary.text">Has terminado de practicar este continente.</p>
+  <div class="summary-stats">
+    <div class="stat correct">✓ <span data-i18n="summary.correct">Aciertos</span>: <strong id="summary-correct">0</strong></div>
+    <div class="stat assisted">🛟 <span data-i18n="summary.assisted">Con ayuda</span>: <strong id="summary-assisted">0</strong></div>
+    <div class="stat wrong">✗ <span data-i18n="summary.wrong">Fallos</span>: <strong id="summary-wrong">0</strong></div>
+  </div>
+  <div class="summary-actions">
+    <button id="btn-restart" data-i18n="summary.restart">Repetir continente</button>
+    <button id="btn-to-menu" data-i18n="summary.toMenu">Volver al menú</button>
+  </div>
+</section>
+
+<script src="lib/d3.min.js"></script>
+<script src="data/africa.js"></script>
+<script src="data/europe.js"></script>
+<script src="data/asia.js"></script>
+<script src="data/america.js"></script>
+<script src="data/oceania.js"></script>
+<script src="data/facts.js"></script>
+<script src="data/facts-en.js"></script>
+<script src="data/facts-fr.js"></script>
+<script src="data/facts-pt.js"></script>
+<script src="data/facts-de.js"></script>
+<script src="data/i18n.js"></script>
+<script src="data/i18n-names-en.js"></script>
+<script src="data/i18n-names-fr.js"></script>
+<script src="data/i18n-names-pt.js"></script>
+<script src="data/i18n-names-de.js"></script>
+<script src="continents.js"></script>
+<script src="mascot.js"></script>
+<script src="script.js"></script>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {
+        // si falla el registro (p.ej. abierto desde file://) la app sigue funcionando igual, solo sin caché offline
+      });
+    });
+  }
+</script>
+</body>
+</html>
